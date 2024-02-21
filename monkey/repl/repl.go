@@ -4,7 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"mokey/lexer"
+
+	"monkey/lexer"
 
 	"monkey/token"
 )
