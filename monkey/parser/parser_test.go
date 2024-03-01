@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"fmt"
 	"testing"
 
 	"monkey/ast"
@@ -18,6 +19,7 @@ let foobar = 838383;
 	p := New(l)
 
 	program := p.ParseProgram()
+
 	if program == nil {
 		t.Fatalf("ParseProgram() returned nil")
 	}
@@ -36,27 +38,27 @@ let foobar = 838383;
 
 	for i, tt := range tests {
 		stmt := program.Statements[i]
-		if !verifyLetStatements(t, stmt, tt.expectedIdentifier) {
+		fmt.Println(stmt)
+		if !testLetStatement(t, stmt, tt.expectedIdentifier) {
 			return
 		}
 	}
 }
 
-func verifyLetStatements(t *testing.T, s ast.Statement, name string) bool {
+func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
 	if s.TokenLiteral() != "let" {
 		t.Errorf("s.TokenLiteral not 'let'. got=%q", s.TokenLiteral())
 		return false
 	}
 
 	letStmt, ok := s.(*ast.LetStatement)
-
 	if !ok {
 		t.Errorf("s not *ast.LetStatement. got=%T", s)
 		return false
 	}
 
 	if letStmt.Name.Value != name {
-		t.Errorf("letStmt.Value not '%s'. got=%s", name, letStmt.Name.Value)
+		t.Errorf("letStmt.Name.Value not '%s'. got=%s", name, letStmt.Name.Value)
 		return false
 	}
 
