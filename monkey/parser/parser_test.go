@@ -10,9 +10,9 @@ import (
 
 func TestReturnStatements(t *testing.T) {
 	input := `
-  return 5
-  return 10
-  return 999999
+  return 5;
+  return 10;
+  return 999999;
   `
 
 	l := lexer.New(input)
