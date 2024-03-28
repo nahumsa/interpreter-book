@@ -8,6 +8,35 @@ import (
 	"monkey/lexer"
 )
 
+func TestReturnStatements(t *testing.T) {
+	input := `
+  return 5
+  return 10
+  return 999999
+  `
+
+	l := lexer.New(input)
+	p := New(l)
+
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+
+	if len(program.Statements) != 3 {
+		t.Fatalf("program.Statements does not contain 3 statements. got=%d", len(program.Statements))
+	}
+
+	for _, stmt := range program.Statements {
+		returnStmt, ok := stmt.(*ast.ReturnStatement)
+		if !ok {
+			t.Errorf("stmt not *ast.ReturnStatement. got=%T", returnStmt)
+			continue
+		}
+		if returnStmt.TokenLiteral() != "return" {
+			t.Errorf("returnStmt.TokenLiteral should be 'return'. got=%T", returnStmt.TokenLiteral())
+		}
+	}
+}
+
 func TestLetStatements(t *testing.T) {
 	input := `
 let x = 5;
@@ -39,7 +68,6 @@ let foobar = 838383;
 
 	for i, tt := range tests {
 		stmt := program.Statements[i]
-		fmt.Println(stmt)
 		if !testLetStatement(t, stmt, tt.expectedIdentifier) {
 			return
 		}
